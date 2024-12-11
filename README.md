@@ -51,4 +51,3 @@ This project is licensed under the [MIT License](LICENSE).
 
 --- 
 
-You can replace `your-username` and `your-repo-name` with your GitHub details and update image links as needed!
