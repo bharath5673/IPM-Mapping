@@ -6,6 +6,7 @@ input_video_path =  'carla_test_vid_156.mp4'
 output_video_path = 'carla_BEV_IPM_output_.mp4' 
 
 
+
 # Open the input video
 cap = cv2.VideoCapture(input_video_path)
 
@@ -15,8 +16,9 @@ if not cap.isOpened():
     exit()
 
 # Get video properties
-frame_width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
-frame_height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+# frame_width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+# frame_height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+frame_width, frame_height = 1280, 800
 fps = int(cap.get(cv2.CAP_PROP_FPS))
 fourcc = cv2.VideoWriter_fourcc(*'mp4v')  # Codec for .mp4 output
 out = cv2.VideoWriter(output_video_path, fourcc, fps, (frame_width, frame_height))
@@ -28,6 +30,7 @@ def IPM(image):
     # Dimensions of the image
     height, width = image.shape[:2]
 
+    param = 400
     # First perspective transform
     original_points1 = np.float32([
         [0, height // 2],          # Top-left of the lower half
@@ -39,8 +42,8 @@ def IPM(image):
     destination_points1 = np.float32([
         [0, 0],                   # Top-left corner
         [width, 0],               # Top-right corner
-        [width - 400, height],    # Bottom-right corner
-        [400, height],            # Bottom-left corner
+        [width - param, height],    # Bottom-right corner
+        [param, height],            # Bottom-left corner
     ])
 
     # Compute and apply the first transformation
@@ -58,8 +61,8 @@ def IPM(image):
     destination_points2 = np.float32([
         [0, 0],                   # Top-left corner
         [width, 0],               # Top-right corner
-        [width - 400, height],    # Bottom-right corner
-        [400, height],            # Bottom-left corner
+        [width - param, height],    # Bottom-right corner
+        [param, height],            # Bottom-left corner
     ])
 
     # Compute and apply the second transformation
@@ -77,8 +80,8 @@ def IPM(image):
     destination_points3 = np.float32([
         [0, 0],                   # Top-left corner
         [width, 0],               # Top-right corner
-        [width - 400, height],    # Bottom-right corner
-        [400, height],            # Bottom-left corner
+        [width - param, height],    # Bottom-right corner
+        [param, height],            # Bottom-left corner
     ])
 
     # Compute and apply the third transformation
@@ -147,6 +150,8 @@ while True:
         print("End of video or error reading frame.")
         break
 
+    frame = cv2.resize(frame, (frame_width, frame_height))
+
     frame_imp = IPM(frame)
 
     frame = picture_in_picture(frame, frame_imp)
@@ -168,3 +173,4 @@ out.release()
 cv2.destroyAllWindows()
 
 print(f"Video saved as: {output_video_path}")
+
