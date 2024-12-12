@@ -5,8 +5,6 @@ import numpy as np
 input_video_path =  'carla_test_vid_156.mp4' 
 output_video_path = 'carla_BEV_IPM_output_.mp4' 
 
-
-
 # Open the input video
 cap = cv2.VideoCapture(input_video_path)
 
@@ -58,8 +56,6 @@ def IPM(image):
 
 
     return final_warped_image
-
-
 
 
 
