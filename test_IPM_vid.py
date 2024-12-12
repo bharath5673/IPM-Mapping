@@ -30,71 +30,36 @@ def IPM(image):
     # Dimensions of the image
     height, width = image.shape[:2]
 
-    param = 400
+    ###
+    param1 = 570
+    param2 = 35
     # First perspective transform
-    original_points1 = np.float32([
-        [0, height // 2],          # Top-left of the lower half
-        [width, height // 2],      # Top-right of the lower half
+    original_points = np.float32([
+        [0, (height // 2)+param2],          # Top-left of the lower half
+        [width, (height // 2)+param2],      # Top-right of the lower half
         [width, height],           # Bottom-right corner
         [0, height],               # Bottom-left corner
     ])
 
-    destination_points1 = np.float32([
+    destination_points = np.float32([
         [0, 0],                   # Top-left corner
         [width, 0],               # Top-right corner
-        [width - param, height],    # Bottom-right corner
-        [param, height],            # Bottom-left corner
+        [width - param1, height*2],    # Bottom-right corner
+        [param1, height*2],            # Bottom-left corner
     ])
 
     # Compute and apply the first transformation
-    matrix1 = cv2.getPerspectiveTransform(original_points1, destination_points1)
-    warped_image1 = cv2.warpPerspective(image, matrix1, (width, height))
-
-    # Second perspective transform
-    original_points2 = np.float32([
-        [0, height // 3],          # Top-left of the lower third
-        [width, height // 3],      # Top-right of the lower third
-        [width, height],           # Bottom-right corner
-        [0, height],               # Bottom-left corner
-    ])
-
-    destination_points2 = np.float32([
-        [0, 0],                   # Top-left corner
-        [width, 0],               # Top-right corner
-        [width - param, height],    # Bottom-right corner
-        [param, height],            # Bottom-left corner
-    ])
-
-    # Compute and apply the second transformation
-    matrix2 = cv2.getPerspectiveTransform(original_points2, destination_points2)
-    warped_image2 = cv2.warpPerspective(warped_image1, matrix2, (width, height))
-
-    # Third perspective transform (this seems redundant but kept for consistency)
-    original_points3 = np.float32([
-        [0, height],              # Top-left of the lower half
-        [width, height],          # Top-right of the lower half
-        [width, height],          # Bottom-right corner
-        [0, height],              # Bottom-left corner
-    ])
-
-    destination_points3 = np.float32([
-        [0, 0],                   # Top-left corner
-        [width, 0],               # Top-right corner
-        [width - param, height],    # Bottom-right corner
-        [param, height],            # Bottom-left corner
-    ])
-
-    # Compute and apply the third transformation
-    matrix3 = cv2.getPerspectiveTransform(original_points3, destination_points3)
-    warped_image3 = cv2.warpPerspective(warped_image2, matrix3, (width, height))
+    matrix = cv2.getPerspectiveTransform(original_points, destination_points)
+    warped_image = cv2.warpPerspective(image, matrix, (width, height*2))
 
 
-    # final_warped_image = warped_image1.copy()
-    final_warped_image = warped_image2.copy()
-    # final_warped_image = warped_image3.copy()
-    # final_warped_image = cv2.resize(warped_image2, (800, 800))
+    final_warped_image = warped_image.copy()
+    final_warped_image = cv2.resize(final_warped_image, (width, height))
+
 
     return final_warped_image
+
+
 
 
 
