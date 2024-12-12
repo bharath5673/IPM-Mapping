@@ -87,11 +87,39 @@ def IPM(image):
     warped_image3 = cv2.warpPerspective(warped_image2, matrix3, (width, height))
 
 
-    # Resize the result to 800x800
-    # final_warped_image = cv2.resize(warped_image2, (800, 800))
+def IPM(image):
+    # Dimensions of the image
+    height, width = image.shape[:2]
+
+    # Forth perspective transform (this seems redundant but kept for consistency)
+    param1 = 570
+    param2 = 35
+    # First perspective transform
+    original_points4 = np.float32([
+        [0, (height // 2)+param2],          # Top-left of the lower half
+        [width, (height // 2)+param2],      # Top-right of the lower half
+        [width, height],           # Bottom-right corner
+        [0, height],               # Bottom-left corner
+    ])
+
+    destination_points4 = np.float32([
+        [0, 0],                   # Top-left corner
+        [width, 0],               # Top-right corner
+        [width - param1, height*2],    # Bottom-right corner
+        [param1, height*2],            # Bottom-left corner
+    ])
+
+    # Compute and apply the first transformation
+    matrix4 = cv2.getPerspectiveTransform(original_points4, destination_points4)
+    warped_image4 = cv2.warpPerspective(image, matrix4, (width, height*2))
+
+
+
     # final_warped_image = warped_image1.copy()
-    final_warped_image = warped_image2.copy()
+    # final_warped_image = warped_image2.copy()
     # final_warped_image = warped_image3.copy()
+    final_warped_image = warped_image4.copy()
+    #final_warped_image = cv2.resize(final_warped_image, (width, height))
 
 
     return image, final_warped_image
