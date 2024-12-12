@@ -86,11 +86,6 @@ def IPM(image):
     matrix3 = cv2.getPerspectiveTransform(original_points3, destination_points3)
     warped_image3 = cv2.warpPerspective(warped_image2, matrix3, (width, height))
 
-
-def IPM(image):
-    # Dimensions of the image
-    height, width = image.shape[:2]
-
     # Forth perspective transform (this seems redundant but kept for consistency)
     param1 = 570
     param2 = 35
