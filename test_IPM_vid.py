@@ -115,14 +115,17 @@ while True:
 
     frame_imp = IPM(frame)
 
-    frame = picture_in_picture(frame, frame_imp)
+
+    ### for pip mode or picture side by side 
+    frame = picture_in_picture(frame, frame_imp)                                            ### P-I-P
+    # frame = cv2.hconcat([frame, cv2.resize(frame_imp, (frame_width//2,frame_height))])    ### side-by-side
 
     # Display the frame
     cv2.imshow('Frame', frame)
 
 
     # Write the frame to the output video
-    out.write(frame)
+    out.write(cv2.resize(frame, (frame_width, frame_height)))
 
     # Press 'q' to exit the display window
     if cv2.waitKey(1) & 0xFF == ord('q'):
@@ -134,4 +137,5 @@ out.release()
 cv2.destroyAllWindows()
 
 print(f"Video saved as: {output_video_path}")
+
 
